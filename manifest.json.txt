@@ -1,0 +1,15 @@
+{
+  "name": "บ้านสะพานหลวง",
+  "short_name": "บ้านสะพานหลวง",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/sJ2PBN1C/S-13139993.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1e3a5f",
+  "theme_color": "#1e3a5f"
+}
