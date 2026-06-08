@@ -9,13 +9,13 @@
     {
       "src": "https://i.ibb.co/sJ2PBN1C/S-13139993.jpg",
       "sizes": "192x192",
-      "type": "image/jpg",
+      "type": "image/jpeg",
       "purpose": "any"
     },
     {
       "src": "https://i.ibb.co/sJ2PBN1C/S-13139993.jpg",
       "sizes": "512x512",
-      "type": "image/jpg",
+      "type": "image/jpeg",
       "purpose": "any"
     }
   ]
