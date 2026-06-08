@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตารางการทำงาน บ้านสะพานหลวง</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #f8fafc;
+    --border: #e2e8f0;
+    --text: #1a202c;
+    --text2: #374151;
+    --text3: #6b7280;
+    --primary: #3b82f6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+  }
+
+  .header-left h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .header-left p { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+
+  /* ── Header right: badge + back button ── */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .header-badge {
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.45);
+    border-radius: 14px;
+    padding: 10px 22px;
+    text-align: center;
+  }
+  .header-badge .hb-month {
+    font-family: 'Kanit', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+  }
+  .header-badge .hb-year {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    margin-top: 2px;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.45);
+    border-radius: 10px;
+    padding: 8px 16px;
+    color: #fff;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.28); }
+
+  /* ── Sheet tabs bar (Google Sheets style) ── */
+  .sheet-tabs-bar {
+    background: #e8edf3;
+    border-bottom: 2px solid #c9d4e0;
+    padding: 0 16px;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    overflow-x: auto;
+    min-height: 42px;
+  }
+
+  .sheet-tab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px 9px;
+    border-radius: 8px 8px 0 0;
+    border: 1.5px solid transparent;
+    border-bottom: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    background: #d0dae6;
+    color: #4a5568;
+    position: relative;
+    bottom: -2px;
+  }
+  .sheet-tab:hover { background: #bfcbda; color: #1a202c; }
+  .sheet-tab.active {
+    background: #ffffff;
+    color: #1d4ed8;
+    border-color: #c9d4e0;
+    border-bottom: 2px solid #ffffff;
+    font-weight: 700;
+  }
+
+  .tab-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  .add-tab-btn {
+    padding: 6px 12px;
+    border-radius: 8px 8px 0 0;
+    border: 1.5px dashed #94a3b8;
+    border-bottom: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    position: relative;
+    bottom: -2px;
+    transition: background 0.1s;
+  }
+  .add-tab-btn:hover { background: #c8d5e2; }
+
+  /* ── Top controls ── */
+  .top-controls {
+    display: flex;
+    gap: 10px;
+    padding: 13px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .ctrl-group { display: flex; align-items: center; gap: 7px; }
+  .ctrl-group label { font-size: 14px; color: var(--text2); font-weight: 600; }
+
+  select, input[type="number"] {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 11px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  select:focus, input[type="number"]:focus { border-color: var(--primary); }
+
+  .main { display: grid; grid-template-columns: 1fr 290px; gap: 16px; padding: 16px; }
+
+  @media (max-width: 860px) {
+    .main { grid-template-columns: 1fr; }
+  }
+
+  .table-card {
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 46px 80px 1fr 1fr 160px;
+    background: #1e3a5f;
+    padding: 11px 0;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .day-row {
+    display: grid;
+    grid-template-columns: 46px 80px 1fr 1fr 160px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    min-height: 50px;
+    transition: background 0.1s;
+  }
+  .day-row:last-child { border-bottom: none; }
+  .day-row:hover { background: #f8fafc; }
+
+  .cell { text-align: center; padding: 5px 2px; }
+  .cell-date { font-weight: 800; color: var(--text); font-size: 17px; }
+  .cell-day { color: var(--text2); font-size: 14px; font-weight: 600; }
+  .cell-shift { text-align: center; padding: 5px 4px; }
+  .cell-note { padding: 4px 8px; }
+
+  .name-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.1s, filter 0.1s;
+    min-width: 80px;
+    white-space: nowrap;
+  }
+  .name-pill:hover { transform: scale(1.05); filter: brightness(0.94); }
+
+  .pill-พรรณี   { background: #ede9fe; color: #6d28d9; }
+  .pill-นุ่น    { background: #fce7f3; color: #be185d; }
+  .pill-นลินี   { background: #dcfce7; color: #15803d; }
+  .pill-สมพร    { background: #e0f2fe; color: #0369a1; }
+  .pill-เดือน   { background: #fee2e2; color: #b91c1c; }
+  .pill-นราทิพย์ { background: #fef3c7; color: #92400e; }
+  .pill-ว่าง   { background: #f1f5f9; color: #94a3b8; border: 1.5px dashed #cbd5e1; }
+
+  .shift-selector { position: relative; display: inline-block; }
+
+  .shift-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 6px;
+    z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    min-width: 130px;
+    display: none;
+  }
+  .shift-dropdown.open { display: block; }
+
+  .dropdown-option {
+    display: block;
+    width: 100%;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 2px;
+    transition: filter 0.1s;
+  }
+  .dropdown-option:hover { filter: brightness(0.92); }
+
+  .note-input {
+    width: 100%;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text3);
+    padding: 4px 6px;
+    border-radius: 6px;
+    resize: none;
+    outline: none;
+  }
+  .note-input:focus { border-color: var(--border); background: var(--surface2); }
+  .note-input::placeholder { color: #d1d5db; }
+
+  .sidebar { display: flex; flex-direction: column; gap: 14px; }
+
+  .summary-card {
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .summary-title {
+    background: linear-gradient(135deg, #1e3a5f, #2563eb);
+    color: #fff;
+    font-family: 'Kanit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 16px;
+    text-align: center;
+  }
+
+  .summary-table { width: 100%; border-collapse: collapse; }
+  .summary-table th {
+    padding: 9px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text3);
+    text-align: center;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-table td {
+    padding: 10px 10px;
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-table tr:last-child td { border-bottom: none; }
+  .summary-table .name-col { text-align: left; }
+
+  .name-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .count-day   { font-weight: 700; color: #2563eb; font-size: 15px; }
+  .count-night { font-weight: 700; color: #7c3aed; font-size: 15px; }
+
+  .legend-card {
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .legend-title { font-size: 14px; font-weight: 700; color: var(--text2); margin-bottom: 10px; }
+  .legend-items { display: flex; flex-direction: column; gap: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text2); }
+  .legend-oval { width: 36px; height: 22px; border-radius: 11px; flex-shrink: 0; display: block; }
+
+  /* Delete tab confirm modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 200; display: flex; align-items: center; justify-content: center;
+    display: none;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: #fff; border-radius: 16px; padding: 24px 28px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18); max-width: 320px; width: 90%; text-align: center;
+  }
+  .modal-box p { font-size: 15px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+  .modal-btns { display: flex; gap: 10px; justify-content: center; }
+  .modal-btns button { font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 600; padding: 8px 22px; border-radius: 8px; cursor: pointer; }
+  .btn-cancel { background: #f1f5f9; border: 1.5px solid var(--border); color: var(--text2); }
+  .btn-confirm { background: #dc2626; border: none; color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>ตารางการทำงาน บ้านสะพานหลวง</h1>
+    <p>กรอกข้อมูลเวรประจำวันและดูสรุปรายบุคคล</p>
+  </div>
+  <div class="header-right">
+    <div class="header-badge">
+      <div class="hb-month" id="header-month">มิถุนายน</div>
+      <div class="hb-year" id="header-year">พ.ศ. 2569</div>
+    </div>
+    <a href="index.html" class="back-btn">← หน้าหลัก</a>
+  </div>
+</header>
+
+<!-- Sheet tabs -->
+<div class="sheet-tabs-bar" id="sheet-tabs-bar">
+  <button class="add-tab-btn" onclick="addTab()" title="เพิ่มชีทใหม่">+</button>
+</div>
+
+<div class="top-controls">
+  <div class="ctrl-group">
+    <label>ปี</label>
+    <input type="number" id="yearInput" value="2569" min="2560" max="2580" style="width:86px">
+  </div>
+  <div class="ctrl-group">
+    <label>เดือน</label>
+    <select id="monthSelect">
+      <option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option>
+      <option value="2">มีนาคม</option><option value="3">เมษายน</option>
+      <option value="4">พฤษภาคม</option><option value="5" selected>มิถุนายน</option>
+      <option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option>
+      <option value="8">กันยายน</option><option value="9">ตุลาคม</option>
+      <option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
+    </select>
+  </div>
+  <div style="flex:1"></div>
+  <button onclick="clearAll()" style="font-family:'Sarabun',sans-serif;font-size:14px;padding:7px 14px;border-radius:8px;border:1.5px solid #fca5a5;background:#fff;color:#dc2626;cursor:pointer;font-weight:600;">🗑 ล้าง</button>
+  <button onclick="exportCSV()" style="font-family:'Sarabun',sans-serif;font-size:14px;padding:7px 14px;border-radius:8px;border:1.5px solid #86efac;background:#fff;color:#16a34a;cursor:pointer;font-weight:600;">📊 CSV</button>
+</div>
+
+<div class="main">
+  <div>
+    <div class="table-card">
+      <div class="table-header">
+        <div>วันที่</div><div>วัน</div>
+        <div>☀️ กลางวัน</div><div>🌙 กลางคืน</div>
+        <div>หมายเหตุ</div>
+      </div>
+      <div id="schedule-body"></div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="summary-card">
+      <div class="summary-title">สรุปจำนวนวันเข้าเวร</div>
+      <table class="summary-table">
+        <thead><tr>
+          <th class="name-col">ชื่อ</th><th>☀️ เช้า</th><th>🌙 ดึก</th><th>รวม</th>
+        </tr></thead>
+        <tbody id="summary-body"></tbody>
+      </table>
+    </div>
+    <div class="legend-card">
+      <div class="legend-title">สัญลักษณ์สีทีมงาน</div>
+      <div class="legend-items" id="legend-items"></div>
+    </div>
+  </div>
+</div>
+
+<div id="overlay" onclick="closeDropdown()" style="position:fixed;inset:0;z-index:50;display:none;"></div>
+
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <p id="deleteModalMsg">ลบชีทนี้?</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeDeleteModal()">ยกเลิก</button>
+      <button class="btn-confirm" onclick="confirmDeleteTab()">ลบ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const NAMES = ['พรรณี','นุ่น','นลินี','สมพร','เดือน','นราทิพย์'];
+const THAI_DAYS = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+const MONTH_NAMES = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+const COLORS = {
+  'พรรณี':   { bg:'#ede9fe', fg:'#6d28d9' },
+  'นุ่น':    { bg:'#fce7f3', fg:'#be185d' },
+  'นลินี':   { bg:'#dcfce7', fg:'#15803d' },
+  'สมพร':    { bg:'#e0f2fe', fg:'#0369a1' },
+  'เดือน':   { bg:'#fee2e2', fg:'#b91c1c' },
+  'นราทิพย์':{ bg:'#fef3c7', fg:'#92400e' },
+};
+
+const TAB_COLORS = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4'];
+
+let scheduleData = {};
+let activeDropdown = null;
+let pendingDeleteIdx = null;
+let tabs = [];
+let activeTabIdx = 0;
+
+function getTabKey(tab) { return `${tab.year}-${tab.month}`; }
+function getCurrentTab() { return tabs[activeTabIdx]; }
+
+function switchTab(idx) {
+  activeTabIdx = idx;
+  const tab = getCurrentTab();
+  document.getElementById('yearInput').value = tab.year;
+  document.getElementById('monthSelect').value = tab.month;
+  renderTabs();
+  renderAll();
+}
+
+function addTab() {
+  const last = tabs[tabs.length - 1];
+  let y = last.year, m = last.month + 1;
+  if (m > 11) { m = 0; y++; }
+  const id = Date.now();
+  tabs.push({ id, label: MONTH_NAMES[m] + ' ' + y, year: y, month: m, colorIdx: tabs.length % TAB_COLORS.length });
+  activeTabIdx = tabs.length - 1;
+  document.getElementById('yearInput').value = y;
+  document.getElementById('monthSelect').value = m;
+  renderTabs();
+  renderAll();
+  saveTabs();
+  saveToStorage();
+}
+
+function askDeleteTab(idx) {
+  if (tabs.length <= 1) { alert('ต้องมีอย่างน้อย 1 ชีท'); return; }
+  pendingDeleteIdx = idx;
+  document.getElementById('deleteModalMsg').textContent = `ลบชีท "${tabs[idx].label}" และข้อมูลทั้งหมดในนั้น?`;
+  document.getElementById('deleteModal').classList.add('open');
+}
+function closeDeleteModal() {
+  pendingDeleteIdx = null;
+  document.getElementById('deleteModal').classList.remove('open');
+}
+function confirmDeleteTab() {
+  const idx = pendingDeleteIdx;
+  if (idx === null) return;
+  const key = getTabKey(tabs[idx]);
+  delete scheduleData[key];
+  tabs.splice(idx, 1);
+  if (activeTabIdx >= tabs.length) activeTabIdx = tabs.length - 1;
+  closeDeleteModal();
+  switchTab(activeTabIdx);
+  saveTabs();
+  saveToStorage();
+}
+
+function renderTabs() {
+  const bar = document.getElementById('sheet-tabs-bar');
+  const addBtn = bar.querySelector('.add-tab-btn');
+  bar.querySelectorAll('.sheet-tab').forEach(e => e.remove());
+  tabs.forEach((tab, idx) => {
+    const btn = document.createElement('div');
+    btn.className = 'sheet-tab' + (idx === activeTabIdx ? ' active' : '');
+    const dot = `<span class="tab-dot" style="background:${TAB_COLORS[tab.colorIdx || 0]}"></span>`;
+    const closeBtn = tabs.length > 1
+      ? `<span onclick="event.stopPropagation();askDeleteTab(${idx})" style="margin-left:4px;font-size:14px;opacity:0.5;line-height:1;cursor:pointer;" title="ลบชีทนี้">×</span>`
+      : '';
+    btn.innerHTML = `${dot}${tab.label}${closeBtn}`;
+    btn.onclick = () => switchTab(idx);
+    bar.insertBefore(btn, addBtn);
+  });
+}
+
+function updateTabLabel() {
+  const tab = getCurrentTab();
+  tab.label = MONTH_NAMES[tab.month] + ' ' + tab.year;
+  renderTabs();
+}
+
+function saveTabs() {
+  try { localStorage.setItem('scheduleAppTabs', JSON.stringify({ tabs, activeTabIdx })); } catch(e){}
+}
+function loadTabs() {
+  try {
+    const d = localStorage.getItem('scheduleAppTabs');
+    if (d) { const p = JSON.parse(d); tabs = p.tabs; activeTabIdx = p.activeTabIdx || 0; return true; }
+  } catch(e){}
+  return false;
+}
+
+function getKey() { return getTabKey(getCurrentTab()); }
+function getOrInit() {
+  const tab = getCurrentTab();
+  const key = getKey();
+  const gy = tab.year - 543;
+  const days = new Date(gy, tab.month + 1, 0).getDate();
+  if (!scheduleData[key]) {
+    scheduleData[key] = {};
+    for (let d = 1; d <= days; d++) scheduleData[key][d] = { day:'', night:'', note:'' };
+  }
+  return scheduleData[key];
+}
+function getDaysInMonth() {
+  const tab = getCurrentTab();
+  return new Date(tab.year - 543, tab.month + 1, 0).getDate();
+}
+
+function closeDropdown() {
+  if (activeDropdown) { activeDropdown.classList.remove('open'); activeDropdown = null; }
+  document.getElementById('overlay').style.display = 'none';
+}
+function openDropdown(el) {
+  closeDropdown();
+  el.classList.add('open');
+  activeDropdown = el;
+  document.getElementById('overlay').style.display = 'block';
+}
+
+function setShift(day, shift, name) {
+  getOrInit()[day][shift] = name;
+  closeDropdown();
+  renderAll();
+  saveToStorage();
+}
+
+function namePillHTML(day, shift, name) {
+  const id = `drop-${day}-${shift}`;
+  const cls = name ? `pill-${name}` : 'pill-ว่าง';
+  const label = name || 'ว่าง';
+  const options = ['', ...NAMES].map(n => {
+    const s = n ? `background:${COLORS[n].bg};color:${COLORS[n].fg};` : 'background:#f1f5f9;color:#94a3b8;';
+    return `<button class="dropdown-option" style="${s}" onclick="setShift(${day},'${shift}','${n}')">${n || '— ว่าง —'}</button>`;
+  }).join('');
+  return `<div class="shift-selector">
+    <button class="name-pill ${cls}" onclick="event.stopPropagation();openDropdown(document.getElementById('${id}'))">${label} ▾</button>
+    <div class="shift-dropdown" id="${id}">${options}</div>
+  </div>`;
+}
+
+function renderSchedule() {
+  const data = getOrInit();
+  const days = getDaysInMonth();
+  const tab = getCurrentTab();
+  const gy = tab.year - 543;
+  let html = '';
+  for (let d = 1; d <= days; d++) {
+    const date = new Date(gy, tab.month, d);
+    const wd = date.getDay();
+    const row = data[d];
+    html += `<div class="day-row">
+      <div class="cell cell-date">${d}</div>
+      <div class="cell cell-day">${THAI_DAYS[wd]}</div>
+      <div class="cell-shift">${namePillHTML(d,'day',row.day)}</div>
+      <div class="cell-shift">${namePillHTML(d,'night',row.night)}</div>
+      <div class="cell cell-note"><textarea class="note-input" rows="1" placeholder="หมายเหตุ..." onchange="setNote(${d},this.value)">${row.note}</textarea></div>
+    </div>`;
+  }
+  document.getElementById('schedule-body').innerHTML = html;
+}
+
+function setNote(day, val) { getOrInit()[day].note = val; saveToStorage(); }
+
+function renderSummary() {
+  const data = getOrInit();
+  const counts = {};
+  NAMES.forEach(n => { counts[n] = {day:0, night:0}; });
+  Object.values(data).forEach(row => {
+    if (row.day   && counts[row.day])   counts[row.day].day++;
+    if (row.night && counts[row.night]) counts[row.night].night++;
+  });
+  let html = '';
+  NAMES.forEach(n => {
+    const c = COLORS[n];
+    const total = counts[n].day + counts[n].night;
+    html += `<tr>
+      <td class="name-col"><span class="name-badge" style="background:${c.bg};color:${c.fg}">${n}</span></td>
+      <td class="count-day">${counts[n].day}</td>
+      <td class="count-night">${counts[n].night}</td>
+      <td style="font-weight:800;color:#1e293b;font-size:15px">${total}</td>
+    </tr>`;
+  });
+  document.getElementById('summary-body').innerHTML = html;
+}
+
+function renderLegend() {
+  let html = '';
+  NAMES.forEach(n => {
+    const c = COLORS[n];
+    html += `<div class="legend-item">
+      <span class="legend-oval" style="background:${c.bg};border:2px solid ${c.fg}55;"></span>
+      <span style="color:${c.fg}">${n}</span>
+    </div>`;
+  });
+  document.getElementById('legend-items').innerHTML = html;
+}
+
+function renderHeader() {
+  const tab = getCurrentTab();
+  document.getElementById('header-month').textContent = MONTH_NAMES[tab.month];
+  document.getElementById('header-year').textContent = `พ.ศ. ${tab.year}`;
+}
+
+function renderAll() {
+  renderHeader(); renderSchedule(); renderSummary(); renderLegend();
+}
+
+function clearAll() {
+  if (!confirm('ล้างข้อมูลชีทนี้ทั้งหมด?')) return;
+  delete scheduleData[getKey()];
+  renderAll(); saveToStorage();
+}
+
+function saveToStorage() {
+  try { localStorage.setItem('scheduleApp', JSON.stringify(scheduleData)); } catch(e){}
+}
+function loadFromStorage() {
+  try { const d = localStorage.getItem('scheduleApp'); if (d) scheduleData = JSON.parse(d); } catch(e){}
+}
+
+function exportCSV() {
+  const data = getOrInit();
+  const days = getDaysInMonth();
+  const tab = getCurrentTab();
+  const gy = tab.year - 543;
+  let csv = 'วันที่,วัน,เวรกลางวัน,เวรกลางคืน,หมายเหตุ\n';
+  for (let d = 1; d <= days; d++) {
+    const row = data[d];
+    csv += `${d},${THAI_DAYS[new Date(gy,tab.month,d).getDay()]},${row.day||'ว่าง'},${row.night||'ว่าง'},"${row.note||''}"\n`;
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'}));
+  a.download = `เวร_${MONTH_NAMES[tab.month]}_${tab.year}.csv`;
+  a.click();
+}
+
+document.getElementById('monthSelect').addEventListener('change', () => {
+  const tab = getCurrentTab();
+  tab.month = parseInt(document.getElementById('monthSelect').value);
+  updateTabLabel();
+  renderAll();
+  saveToStorage(); saveTabs();
+});
+document.getElementById('yearInput').addEventListener('change', () => {
+  const tab = getCurrentTab();
+  tab.year = parseInt(document.getElementById('yearInput').value);
+  updateTabLabel();
+  renderAll();
+  saveToStorage(); saveTabs();
+});
+
+loadFromStorage();
+const tabsLoaded = loadTabs();
+
+if (!tabsLoaded) {
+  tabs = [
+    { id: 1, label: 'มิถุนายน 2569', year: 2569, month: 5, colorIdx: 0 },
+    { id: 2, label: 'กรกฎาคม 2569',  year: 2569, month: 6, colorIdx: 1 },
+  ];
+  activeTabIdx = 0;
+}
+
+if (!localStorage.getItem('scheduleApp')) {
+  scheduleData['2569-5'] = {
+    1:{day:'นลินี',night:'นลินี',note:''},2:{day:'นลินี',night:'พรรณี',note:''},
+    3:{day:'นลินี',night:'นุ่น',note:''},4:{day:'นราทิพย์',night:'นราทิพย์',note:''},
+    5:{day:'พรรณี',night:'นราทิพย์',note:''},6:{day:'นลินี',night:'นลินี',note:''},
+    7:{day:'นุ่น',night:'พรรณี',note:''},8:{day:'นลินี',night:'นุ่น',note:''},
+    9:{day:'นลินี',night:'พรรณี',note:''},10:{day:'นลินี',night:'นุ่น',note:''},
+    11:{day:'นลินี',night:'นลินี',note:''},12:{day:'พรรณี',night:'พรรณี',note:''},
+    13:{day:'นุ่น',night:'นุ่น',note:''},14:{day:'พรรณี',night:'พรรณี',note:''},
+    15:{day:'พรรณี',night:'นุ่น',note:''},16:{day:'นลินี',night:'พรรณี',note:''},
+    17:{day:'นลินี',night:'พรรณี',note:''},18:{day:'นราทิพย์',night:'นุ่น',note:''},
+    19:{day:'พรรณี',night:'พรรณี',note:''},20:{day:'พรรณี',night:'นุ่น',note:''},
+    21:{day:'พรรณี',night:'พรรณี',note:''},22:{day:'เดือน',night:'เดือน',note:''},
+    23:{day:'เดือน',night:'เดือน',note:''},24:{day:'เดือน',night:'เดือน',note:''},
+    25:{day:'เดือน',night:'เดือน',note:''},26:{day:'พรรณี',night:'นลินี',note:''},
+    27:{day:'สมพร',night:'นุ่น',note:''},28:{day:'นราทิพย์',night:'พรรณี',note:''},
+    29:{day:'นลินี',night:'นุ่น',note:''},30:{day:'นลินี',night:'พรรณี',note:''},
+  };
+}
+
+document.getElementById('yearInput').value = getCurrentTab().year;
+document.getElementById('monthSelect').value = getCurrentTab().month;
+renderTabs();
+renderAll();
+</script>
+</body>
+</html>
